@@ -1,0 +1,99 @@
+.nftbody{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.body{
+    box-sizing: border-box;
+}
+.title{
+    color:rgb(118, 69, 217);
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 1px 0px black;
+}
+
+.head{
+    color:rgb(118, 69, 217);
+    margin-bottom: 40px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nftname{
+    margin-left: auto;
+    margin-right: auto;
+}
+.container{
+    text-decoration: none;
+    color: black;
+}
+.nftcard{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 2px solid rgb(237, 237, 237);
+    margin: 20px;
+    padding-bottom:20px; 
+    box-shadow: 3px 3px rgb(191, 191, 191);
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    background-color: white;
+    transition:  box-shadow 0.3s;
+}
+
+.nftimage{
+    width: 70%;
+    height: 50%;
+    border-radius: 20px;
+    transition: all 0.5s;
+}
+
+.nftcard:hover{
+    background-color: rgb(245, 245, 245);
+    border: 2px solid rgb(204, 204, 204);
+    box-shadow: 8px 5px 5px 5px rgb(154, 154, 154);
+}
+
+.nftcard:hover .nftimage{
+    transform: scale(1.1);
+}
+
+.nftcontent{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: start;
+    /*make element auto to new line when reach max-width*/
+    flex-wrap: wrap;
+    width: 100%;
+}
+.nftcontainer{
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.description{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.descriptiontext{
+    color:rgb(170, 169, 169);
+    font-size:10px;
+}
+
+.datavalue{
+    font-size: 10px;
+    margin-top: -1px;
+    max-width: 300px;
+}
+
+.horizontaldividerblack{
+    border-bottom: 1px solid rgb(0, 0, 0);
+    width: 100%;
+}
