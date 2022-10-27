@@ -40,5 +40,12 @@
     "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.2"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "contract.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC"
 }
