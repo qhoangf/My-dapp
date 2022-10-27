@@ -5,6 +5,7 @@ import utils from '../styles/utils.module.css'
 import Link from 'next/link'
 import Layout, { siteTitle } from '../components/layout'
 import NavBar from '../components/NavBar'
+import { useState, useEffect } from "react";
 import nftintro from '../public/images/nftintro.gif'
 import nftintro3 from '../public/images/nftintro3.gif'
 import blockbitcoin from '../public/images/blockbitcoin.gif'
@@ -13,20 +14,52 @@ import phantomlogo from '../public/images/phantomlogo.png'
 import majarlogo from '../public/images/majarlogo.gif'
 
 export default function Home() {
+  const [isWaiting, setIsWaiting] = useState(true);
+
+  const closeModalByBackground = () => {
+    let modal = document.getElementById("selectWalletModal");
+    modal.classList.remove("is-active");
+  };
+
+  const connectWalletHandler = async () => {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      alert("Please install Metamask!")
+    }
+
+    try {
+      const account = await ethereum.request({ method: 'eth_requestAccounts' })
+      console.log("Found an account! Address: ", account[0])
+      setCurrentAccount(account[0])
+    } catch (error) {
+      setIsWaiting(false);
+      setLoading(false);
+    }
+  }
+
   const openSelectWalletModal = function () {
     let selectWalletModal = document.getElementById("selectWalletModal");
     selectWalletModal.classList.add("is-active");
   }
 
   const connectMetamaskWallet = function () {
-    let connectWalletButton = document.querySelector(".Navbar_btn__2_IOi");
-    connectWalletButton.click();
+    setIsWaiting(true);
+    connectWalletHandler();
+    setLoading(true);
+  }
 
+  const setLoading = function (bool) {
     let loadingModal = document.getElementById("loadingModal");
     let contentModal = document.getElementById("contentModal");
 
-    loadingModal.classList.remove("is-hidden");
-    contentModal.classList.add("is-hidden");
+    if (bool) {
+      loadingModal.classList.remove("is-hidden");
+      contentModal.classList.add("is-hidden");
+    } else {
+      loadingModal.classList.add("is-hidden");
+      contentModal.classList.remove("is-hidden");
+    }
   }
 
   const rollToTop = function () {
@@ -112,8 +145,8 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="modal" id='selectWalletModal'>
-        <div className="modal-background"></div>
+      <div className="modal" id='selectWalletModal' >
+        <div className="modal-background" onClick={closeModalByBackground}></div>
         <div className="modal-content has-background-white has-border-rounded-10px">
           <div id="contentModal">
             <div className='container p-6'>
