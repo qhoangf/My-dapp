@@ -1,14 +1,16 @@
-.container{
+.container {
     padding: 0;
     margin: 0;
 }
-.containerbtn{
+
+.containerbtn {
     text-align: end;
     padding: 10px 20px;
     background-color: rgb(225, 225, 225);
-    border-bottom: 1px solid rgb(194, 194, 194);   
+    border-bottom: 1px solid rgb(194, 194, 194);
 }
-.sellbtn{
+
+.sellbtn {
     justify-content: center;
     font-size: 15px;
     width: 162px;
@@ -26,52 +28,54 @@
     border-radius: 12px;
 }
 
-.sellbtn:hover{
+.sellbtn:hover {
     opacity: 0.8;
 }
 
-.content{
+.content {
     padding: 0px 0px 0px 140px;
     margin-top: 50px;
     display: flex;
     justify-content: start;
 }
 
-.nftimage{
+.nftimage {
     margin: 0px 20px;
     display: block;
     width: 400px;
     height: 600px;
-    
+
 }
-.nftimage > img{
+
+.nftimage>img {
     width: 100%;
     height: 100%;
     border-radius: 12px;
 }
-.nameContract{
+
+.nameContract {
     font-size: 20px;
-    color:rgb(32, 129, 226);
+    color: rgb(32, 129, 226);
     font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
 }
 
-.nftname{
+.nftname {
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 40px;
 }
 
-.owned{
+.owned {
     color: rgb(112, 122, 131);
     font-size: 15px;
 }
 
-.owned span{
-    color:rgb(32, 129, 226);
+.owned span {
+    color: rgb(32, 129, 226);
 }
 
-.containerDetail{
+.containerDetail {
     margin: 70px;
     background-color: rgb(233, 233, 233);
     border: 1px solid rgb(183, 183, 183);
@@ -80,34 +84,35 @@
     box-shadow: rgb(4 17 29 / 25%) 0px 0px 10px 0px;
 }
 
-.containerDetailHead{
+.containerDetailHead {
     text-align: start;
     padding: 20px;
     border-bottom: 1px solid rgb(204, 204, 204);
 }
 
-.containerDetailHead p{
+.containerDetailHead p {
     margin-top: 0;
     font-size: 20px;
     font-weight: bold;
 }
-.containerDetailBody{
+
+.containerDetailBody {
     padding: 0px 20px 20px 20px;
 }
 
-.details{
+.details {
     display: flex;
     justify-content: space-between;
     color: rgb(74, 74, 74);
 }
 
-.details a{
+.details a {
     margin-top: 20px;
     margin-bottom: 0;
     color: rgb(32, 129, 226);
 }
 
-.modal{
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -120,7 +125,7 @@
     padding-top: 100px;
 }
 
-.modalcontent{
+.modalcontent {
     position: relative;
     text-align: center;
     background-color: #fefefe;
@@ -129,17 +134,24 @@
     border: 1px solid #888;
     border-radius: 20px;
     width: 80%;
-    box-shadow: 0 4px 8px 0 rgba(28, 28, 28, 0.2),0 6px 20px 0 rgba(38, 38, 38, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(28, 28, 28, 0.2), 0 6px 20px 0 rgba(38, 38, 38, 0.19);
     animation-name: animatetop;
     animation-duration: 0.4s;
 }
 
 @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
-.modalhead{
+.modalhead {
     display: block;
     text-align: start;
     width: fit-content;
@@ -147,18 +159,18 @@
     margin-right: auto;
 }
 
-.price{
+.price {
     font-size: 20px;
     font-weight: 500;
 }
 
-.modalbody{
+.modalbody {
     display: flex;
     width: fit-content;
     margin-top: 10px;
 }
 
-.modalbody input{
+.modalbody input {
     margin-left: 10px;
     border: 1px solid rgb(179, 179, 179);
     border-radius: 10px;
@@ -167,7 +179,8 @@
 }
 
 
-.updatebtn, .deletebtn{
+.updatebtn,
+.deletebtn {
     justify-content: center;
     font-size: 13px;
     width: 140px;
@@ -182,18 +195,20 @@
     margin: 20px 10px;
 }
 
-.deletebtn{
+.deletebtn {
     background-color: rgb(253, 45, 45);
     border: 2px solid rgb(253, 45, 45);
 }
-.updatebtn:hover{
-    opacity: 0.8;
-}
-.deletebtn:hover{
+
+.updatebtn:hover {
     opacity: 0.8;
 }
 
-.waitingbtn{
+.deletebtn:hover {
+    opacity: 0.8;
+}
+
+.waitingbtn {
     justify-content: center;
     font-size: 13px;
     width: fit-content;
@@ -209,7 +224,7 @@
     margin: 20px 10px;
 }
 
-.viewlistingbtn{
+.viewlistingbtn {
     justify-content: center;
     font-size: 13px;
     width: 500px;
@@ -225,11 +240,11 @@
     cursor: pointer;
 }
 
-.viewlistingbtn:hover{
+.viewlistingbtn:hover {
     opacity: 0.8;
 }
 
-.modalcontentFinished{
+.modalcontentFinished {
     position: relative;
     text-align: center;
     background-color: #fefefe;
@@ -239,19 +254,19 @@
     border-radius: 20px;
     width: 50%;
     height: 530px;
-    box-shadow: 0 4px 8px 0 rgba(28, 28, 28, 0.2),0 6px 20px 0 rgba(38, 38, 38, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(28, 28, 28, 0.2), 0 6px 20px 0 rgba(38, 38, 38, 0.19);
     animation-name: animatetop;
     animation-duration: 0.4s;
 }
 
-.imgFinished{
+.imgFinished {
     width: 300px;
     height: 300px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.containerSale{
+.containerSale {
     display: block;
     margin: 70px;
     background-color: rgb(233, 233, 233);
@@ -271,7 +286,7 @@
     margin: 0 10px;
 }
 
-.cancelbtn{
+.cancelbtn {
     justify-content: center;
     font-size: 13px;
     width: 140px;
@@ -287,7 +302,7 @@
     transition: all 0.5s;
 }
 
-.makeofferbtn{
+.makeofferbtn {
     justify-content: center;
     font-size: 17px;
     width: 162px;
@@ -296,7 +311,7 @@
     letter-spacing: 0.01em;
     padding: 17px 24px;
     background-color: rgb(235, 235, 235);
-    border: 2px solid rgb(201, 201, 201);   
+    border: 2px solid rgb(201, 201, 201);
     color: rgb(32, 129, 226);
     display: inline-flex;
     flex-direction: row;
@@ -306,27 +321,29 @@
     transition: all 0.5s;
 }
 
-.cancelbtn:hover, .makeofferbtn:hover{
+.cancelbtn:hover,
+.makeofferbtn:hover {
     box-shadow: rgb(201, 201, 201) 2px 2px 8px 2px;
 }
 
-.arrow{
+.arrow {
     width: 10px;
     margin-left: 10px;
 }
-.dropbtn{
+
+.dropbtn {
     margin-top: 2px;
     background-color: transparent;
     border: none;
     font-family: 'Times New Roman', Times, serif;
     font-size: 15px;
-    color:rgb(122, 110, 170);
+    color: rgb(122, 110, 170);
     border-radius: 10px;
     padding: 10px;
     transition: background-color 0.3s;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
     border: 1px solid rgb(179, 179, 179);
@@ -337,6 +354,35 @@
     font-size: 16px;
 }
 
-.option{
+.option {
     padding: 10px;
+}
+
+.createNft:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 0.75;
+    background-image: url(/images/exchangebackground.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    filter: blur(1px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.mainsection {
+    height: 80vh;
+    padding: 3rem;
+}
+
+.maincontainer {
+    height: calc(100vh - 64px);
+    padding-top: 5rem;
 }

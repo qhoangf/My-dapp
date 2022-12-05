@@ -97,3 +97,20 @@
     border-bottom: 1px solid rgb(0, 0, 0);
     width: 100%;
 }
+
+.warningcontent {
+    color: red;
+    text-shadow: 2px 2px #ffb0005c;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+    padding-top: 20rem;
+}
+
+.warningcontainer {
+    background-image: url(../public/images/warningconnectbackground.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    height: calc(100vh - 64px);
+}

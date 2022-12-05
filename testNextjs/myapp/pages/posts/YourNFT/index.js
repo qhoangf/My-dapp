@@ -50,9 +50,9 @@ export default function YourNFT(){
       }
 
     const notConnected = () =>{
-        return(
-            <div>
-                <h1 className={styles.head}>Please connect your wallet!</h1>
+        return (
+            <div className={styles.warningcontainer}>
+                <h1 className={styles.warningcontent} >You are not connecting to the wallet. Please connect before using this function!</h1>
             </div>
         )
     }
