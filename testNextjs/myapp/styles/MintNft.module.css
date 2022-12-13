@@ -104,18 +104,16 @@
 
 .statusMinted {
     background-color: rgb(2, 221, 221);
+    margin: 0 0.15rem;
     padding: 4px 30px;
-    border: 1px solid rgb(136, 136, 136);
     border-radius: 7px;
-    box-shadow: 2px 3px rgb(105, 105, 105);
 }
 
 .statusNotMintYet {
     background-color: white;
+    margin: 0 0.15rem;
     padding: 4px 30px;
-    border: 1px solid rgb(136, 136, 136);
     border-radius: 7px;
-    box-shadow: 2px 3px rgb(105, 105, 105);
 }
 
 .statusText {

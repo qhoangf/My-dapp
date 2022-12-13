@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { ethers } from "ethers";
 import Link from "next/link";
 import CancelListingPopup from "./cancelListing";
+import { Card, Text, Badge, Button, Group } from '@mantine/core';
 
 
 let web3 = new Web3(Web3.givenProvider)
@@ -17,8 +18,8 @@ export default function Detail() {
     const router = useRouter()
     const [value, setValue] = useState("BNB");
     const tokenId = router.query.id
-    const [contract_address, setContract_address ] = useState('')
-    const contract = new web3.eth.Contract(contractABI,contractAddress)
+    const [contract_address, setContract_address] = useState('')
+    const contract = new web3.eth.Contract(contractABI, contractAddress)
     const marketplaceContract = new web3.eth.Contract(marketplaceABI, marketplaceAddress)
     const ERC20 = new web3.eth.Contract(ERC20ABI, ERC20Address)
     const [nft, setNft] = useState('')
@@ -33,16 +34,16 @@ export default function Detail() {
     const urlApiEndpointDeleteData = 'http://localhost:3000/api/deleteNftData-lib'
     const urlApiEndpointUpdateData = 'http://localhost:3000/api/updateNftData-lib'
 
-    function timeout(ms){
+    function timeout(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
-    async function getData(){
+    async function getData() {
         const res = await fetch(urlApiEndpointGetData)
         const req = await res.json()
         const request = req.data
-        request.map(item =>{
-            if(Number(tokenId) == Number(item['tokenid'])){
+        request.map(item => {
+            if (Number(tokenId) == Number(item['tokenid'])) {
                 const datanft = {
                     coupon: item['coupon'],
                     price: item['price'],
@@ -54,17 +55,17 @@ export default function Detail() {
         })
     }
 
-    const getNFTDataByTokenId = async () =>{
+    const getNFTDataByTokenId = async () => {
         const total = await contract.methods.totalSupply().call()
-        if(tokenId <= Number(total)){
+        if (tokenId <= Number(total)) {
             const result = await contract.methods.tokenURI(tokenId).call()
             let data = await axios.get(result)
             let meta = data.data
             const ownerItem = await contract.methods.ownerOf(tokenId).call()
-            .then(res => {
-                meta.owned= res
-            })
-            meta.tokenid= tokenId;
+                .then(res => {
+                    meta.owned = res
+                })
+            meta.tokenid = tokenId;
             meta.contract = contractAddress;
             setNft(meta)
             //console.log(nfts['price'])
@@ -74,70 +75,70 @@ export default function Detail() {
             //     const sellBtn = document.getElementById('sellBtn')
             //     sellBtn.style.display = "none"
             // }
-        }else{
+        } else {
             window.location.href = "/404"
         }
     }
 
     const checkCorrectNetwork = async () => {
-		const { ethereum } = window
-		let chainId = await ethereum.request({ method: 'eth_chainId' })
-		console.log('Connected to chain:' + chainId)
+        const { ethereum } = window
+        let chainId = await ethereum.request({ method: 'eth_chainId' })
+        console.log('Connected to chain:' + chainId)
 
-		const bscTestnet = '0x61'
+        const bscTestnet = '0x61'
 
-		if (chainId !== bscTestnet) {
-			setCorrectNetwork(false)
-		} else {
-			setCorrectNetwork(true)
-		}
-	}
+        if (chainId !== bscTestnet) {
+            setCorrectNetwork(false)
+        } else {
+            setCorrectNetwork(true)
+        }
+    }
 
     const checkIfWalletIsConnected = async () => {
-		const { ethereum } = window
-		const accounts = await ethereum.request({ method: 'eth_accounts' })
+        const { ethereum } = window
+        const accounts = await ethereum.request({ method: 'eth_accounts' })
 
-		if (accounts.length !== 0) {
-			console.log('Found authorized Account: ', accounts[0])
-			setCurrentAccount(accounts[0])
+        if (accounts.length !== 0) {
+            console.log('Found authorized Account: ', accounts[0])
+            setCurrentAccount(accounts[0])
             checkCorrectNetwork()
-		} else {
-			const account = await ethereum.request({method: 'eth_requestAccounts'})
+        } else {
+            const account = await ethereum.request({ method: 'eth_requestAccounts' })
             setCurrentAccount(account[0])
-		}
+        }
 
-	}
+    }
 
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         checkIfWalletIsConnected()
         setContract_address(router.query.contract)
-        if(tokenId){
+        if (tokenId) {
             getData()
             getNFTDataByTokenId()
         }
-    },[contract_address,tokenId])
+    }, [contract_address, tokenId])
 
-   
-    
-    const showPopup = () =>{
+
+
+    const showPopup = () => {
         const modal = document.getElementById('myModal')
         modal.style.display = "block"
         setIsChange(false)
     }
 
-    const showPopupChange = () =>{
+    const showPopupChange = () => {
         const modal = document.getElementById('myModalChange')
         modal.style.display = "block"
         setIsChange(true)
     }
 
-    const showPopupCancel = () =>{
+    const showPopupCancel = () => {
         const modal = document.getElementById('myModalCancel')
         modal.style.display = "block"
     }
 
-    const closePopup = () =>{
+    const closePopup = () => {
         const modal = document.getElementById('myModal')
         modal.style.display = "none"
         const modalChange = document.getElementById('myModalChange')
@@ -145,22 +146,22 @@ export default function Detail() {
         const modalWaiting = document.getElementById('myModalWaiting')
         modalWaiting.style.display = "none"
     }
-    
-    async function changePrice(){
-        const object = {"Tokenid":tokenId,"spender":currentAccount, "price": price, "timestamp": Date.now()};
+
+    async function changePrice() {
+        const object = { "Tokenid": tokenId, "spender": currentAccount, "price": price, "timestamp": Date.now() };
         const hash = ethers.utils.hashMessage(JSON.stringify(object));
         const signature = await ethereum.request({
             method: "personal_sign",
-            params: [hash , currentAccount],
-        }).catch(e =>{
+            params: [hash, currentAccount],
+        }).catch(e => {
             alert(e.message)
-            setIsWaiting(false) 
+            setIsWaiting(false)
         })
-        if(signature){
-            const coupon = hash+signature;
+        if (signature) {
+            const coupon = hash + signature;
             const nftData = {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     tokenid: Number(nft['tokenid']),
                     price: price,
@@ -184,30 +185,30 @@ export default function Detail() {
         modalWaiting.style.display = "block"
 
         const check = await contract.methods.ownerOf(tokenId).call()
-        if(Number(check) == Number(currentAccount)){
+        if (Number(check) == Number(currentAccount)) {
             changePrice()
-        }else{
+        } else {
             alert('You are not the owner of this token')
         }
     }
 
-    async function grantCoupon(){
+    async function grantCoupon() {
         const type = value
         console.log(type)
-        const object = {"Tokenid":tokenId,"spender":currentAccount, "price": price, "typeToken": type, "timestamp": Date.now()};
+        const object = { "Tokenid": tokenId, "spender": currentAccount, "price": price, "typeToken": type, "timestamp": Date.now() };
         const hash = ethers.utils.hashMessage(JSON.stringify(object));
         const signature = await ethereum.request({
             method: "personal_sign",
-            params: [hash , currentAccount],
-        }).catch(e =>{
+            params: [hash, currentAccount],
+        }).catch(e => {
             alert(e.message)
-            setIsWaiting(false) 
+            setIsWaiting(false)
         })
-        if(signature){
-            const coupon = hash+signature;
+        if (signature) {
+            const coupon = hash + signature;
             const nftData = {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     tokenid: Number(nft['tokenid']),
                     owner: nft['owned'],
@@ -228,35 +229,35 @@ export default function Detail() {
         }
     }
 
-    function splitCoupon(coupon){
-        const hash = coupon.slice(0,66);
+    function splitCoupon(coupon) {
+        const hash = coupon.slice(0, 66);
         const signature = coupon.slice(66, coupon.length);
         const r = signature.slice(0, 66);
         const s = "0x" + signature.slice(66, 130);
         const v = parseInt(signature.slice(130, 132), 16);
         const signatureParts = { r, s, v };
-        console.log([hash,signatureParts])
-        return ([hash,signatureParts]);
+        console.log([hash, signatureParts])
+        return ([hash, signatureParts]);
     }
 
-    async function buyItemWithErc20(hash, _v, _r, _s, seller, priceToBuy){
+    async function buyItemWithErc20(hash, _v, _r, _s, seller, priceToBuy) {
         transaction = await marketplaceContract.methods.buyItemWithErc20(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
-        .send({from: currentAccount})
-        .catch(e => {
-            if(e.code === 4001){
-                alert('MetaMask Message Signature: User denied message signature.')
-            }
-        })
+            .send({ from: currentAccount })
+            .catch(e => {
+                if (e.code === 4001) {
+                    alert('MetaMask Message Signature: User denied message signature.')
+                }
+            })
 
         return transaction
     }
 
-    async function verify(){
+    async function verify() {
         let coupon = nfts['coupon']
         let price = nfts['price']
         let seller = nfts['owner']
         let typecoin = nfts['typecoin']
-        
+
         //console.log(price)
         const couponParts = splitCoupon(coupon);
         console.log(typecoin)
@@ -267,57 +268,57 @@ export default function Detail() {
         const _v = signature["v"]
         const priceToBuy = web3.utils.toWei(price.toString(), 'ether')
         //console.log()
-        try{
+        try {
             let transaction
-            if(typecoin == 'BNB'){
+            if (typecoin == 'BNB') {
                 transaction = await marketplaceContract.methods.buyItem(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
-                .send({ from: currentAccount, value: priceToBuy })
-                .catch(e => {
-                    if(e.code === 4001){
-                        alert('MetaMask Message Signature: User denied message signature.')
-                    }
-                })
-            }else{
-                const checkAllowance = await ERC20.methods.allowance(currentAccount, marketplaceAddress).call()
-                console.log(checkAllowance)
-                console.log(priceToBuy)
-                if(Number(checkAllowance) >= Number(priceToBuy)){
-                    transaction = await marketplaceContract.methods.buyItemWithErc20(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
-                    .send({from: currentAccount})
+                    .send({ from: currentAccount, value: priceToBuy })
                     .catch(e => {
-                        if(e.code === 4001){
+                        if (e.code === 4001) {
                             alert('MetaMask Message Signature: User denied message signature.')
                         }
                     })
-                }else{
-                    const totalSupply = await ERC20.methods.totalSupply().call()
-                    if(totalSupply){
-                        const approve = await ERC20.methods.approve(marketplaceAddress, totalSupply).send({from: currentAccount})
-                        .catch(e =>{
-                            alert(e.message)
+            } else {
+                const checkAllowance = await ERC20.methods.allowance(currentAccount, marketplaceAddress).call()
+                console.log(checkAllowance)
+                console.log(priceToBuy)
+                if (Number(checkAllowance) >= Number(priceToBuy)) {
+                    transaction = await marketplaceContract.methods.buyItemWithErc20(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
+                        .send({ from: currentAccount })
+                        .catch(e => {
+                            if (e.code === 4001) {
+                                alert('MetaMask Message Signature: User denied message signature.')
+                            }
                         })
-
-                        if(approve){
-                            transaction = await marketplaceContract.methods.buyItemWithErc20(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
-                            .send({from: currentAccount})
+                } else {
+                    const totalSupply = await ERC20.methods.totalSupply().call()
+                    if (totalSupply) {
+                        const approve = await ERC20.methods.approve(marketplaceAddress, totalSupply).send({ from: currentAccount })
                             .catch(e => {
-                                if(e.code === 4001){
-                                    alert('MetaMask Message Signature: User denied message signature.')
-                                }
+                                alert(e.message)
                             })
+
+                        if (approve) {
+                            transaction = await marketplaceContract.methods.buyItemWithErc20(contractAddress, tokenId, hash, _v, _r, _s, seller, priceToBuy)
+                                .send({ from: currentAccount })
+                                .catch(e => {
+                                    if (e.code === 4001) {
+                                        alert('MetaMask Message Signature: User denied message signature.')
+                                    }
+                                })
                         }
                     }
 
-                    
-                    
+
+
                 }
-                
+
             }
 
-            if(transaction){
+            if (transaction) {
                 const deleteNftData = {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         tokenid: Number(nft['tokenid'])
                     })
@@ -327,16 +328,16 @@ export default function Detail() {
                 console.log(req.message)
                 alert('Buy successful!')
             }
-            
+
             //await transaction.wait();
             //displayMessage("00","Transaction confirmed with hash "+transaction.hash);
         }
-        catch(error){
+        catch (error) {
             console.log(error)
         }
     }
 
-    const listToMarketplace = async () =>{
+    const listToMarketplace = async () => {
 
         setIsWaiting(true)
         const modal = document.getElementById('myModal')
@@ -345,26 +346,26 @@ export default function Detail() {
         modalWaiting.style.display = "block"
 
         const check = await contract.methods.isApprovedForAll(currentAccount, marketplaceAddress).call()
-        if(!check){
-            const setApproval = await contract.methods.setApprovalForAll(marketplaceAddress, true).send({from: currentAccount})
-            .catch(e =>{
-                if(e.code === 4001){
-                    alert('MetaMask Message Signature: User denied message signature.')
-                    setIsWaiting(false)
-                }
-            })
-            if(setApproval){
+        if (!check) {
+            const setApproval = await contract.methods.setApprovalForAll(marketplaceAddress, true).send({ from: currentAccount })
+                .catch(e => {
+                    if (e.code === 4001) {
+                        alert('MetaMask Message Signature: User denied message signature.')
+                        setIsWaiting(false)
+                    }
+                })
+            if (setApproval) {
                 grantCoupon();
-            }else{
+            } else {
                 return
             }
-        }else{
+        } else {
             grantCoupon()
         }
     }
 
-    const btn = () =>{
-        return(
+    const btn = () => {
+        return (
             <>
                 <button type="submit" className={styles.updatebtn} onClick={listToMarketplace}>Approval agian</button>
                 <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
@@ -372,8 +373,8 @@ export default function Detail() {
         )
     }
 
-    const btnChange = () =>{
-        return(
+    const btnChange = () => {
+        return (
             <>
                 <button type="submit" className={styles.updatebtn} onClick={changePriceToSell}>Approval agian</button>
                 <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
@@ -393,136 +394,187 @@ export default function Detail() {
     const saleDetail = () => {
         const sellBtn = document.getElementById('sellBtn')
         sellBtn.style.display = "none"
-        return(
+        return (
             <div id="saleDetail" className={styles.containerSale}>
-                        <div className={styles.containerDetailHead}>
-                            <p>Sale ends</p>
-                        </div>
-                        <div className={styles.containerDetailBody}>
-                            <div className={styles.detailsSale}>
-                                <p>Current price</p>
-                            </div>
-                            <div className={styles.detailsSale}>
-                                {nfts['typecoin'] == 'BNB' ? <Image src="/images/bnbcoin.png" width={35} height={10}/> : <Image src="/images/boilogo.png" width={35} height={10}/>}
-                                <h1>{nfts['price']}</h1>
-                            </div>
-                            <div>
-                                {Number(nft['owned']) == Number(currentAccount) ? CancelListing() : <button type="submit" className={styles.updatebtn} onClick={verify}>Buy now</button>}
-                            </div>
-                        </div>
+                <div className={styles.containerDetailHead}>
+                    <p>Sale ends</p>
+                </div>
+                <div className={styles.containerDetailBody}>
+                    <div className={styles.detailsSale}>
+                        <p>Current price</p>
                     </div>
+                    <div className={styles.detailsSale}>
+                        {nfts['typecoin'] == 'BNB' ? <Image src="/images/bnbcoin.png" width={35} height={10} /> : <Image src="/images/boilogo.png" width={35} height={10} />}
+                        <h1>{nfts['price']}</h1>
+                    </div>
+                    <div>
+                        {Number(nft['owned']) == Number(currentAccount) ? CancelListing() : <button type="submit" className={styles.updatebtn} onClick={verify}>Buy now</button>}
+                    </div>
+                </div>
+            </div>
         )
     }
 
 
-return (
-    <div className={styles.container}>
-        <div id="sellBtn" className={styles.containerbtn}>
-            {Number(nft['owned']) == Number(currentAccount) ? <button className={styles.sellbtn} onClick={showPopup}>SELL</button>: <button className={styles.makeofferbtn} onClick={showPopup}>Make offer</button>}
-            
-        </div>
-        <div className={styles.content}>
-            <div className={styles.nftimage}>
-                <img src={nft['image']}/>
+    return (
+        <div className={styles.detailsnftcontainer}>
+            <div id="sellBtn" className={styles.sellBtnContainer}>
+                {Number(nft['owned']) == Number(currentAccount) ? <button className={styles.sellbtn} onClick={showPopup}>SELL</button> : <button className={styles.makeofferbtn} onClick={showPopup}>Make offer</button>}
+
             </div>
-                <div className={styles.nftcontent}>
-                    <a href="https://testnet.bscscan.com/token/0x72bE3b77d298c42954611D624064917e8EA96B17" className={styles.nameContract}>CryptoViet</a>
-                    <p className={styles.nftname}>{nft['name']}</p>                   
-                    <p className={styles.owned}>Owned by: <span>{nft['owned']}</span></p>
-                    
-                    {nfts['price'] ? saleDetail(): <></>}
-                    <div className={styles.containerDetail}>
-                        <div className={styles.containerDetailHead}>
-                            <p>Details</p>
-                        </div>
-                        <div className={styles.containerDetailBody}>
-                            <div className={styles.details}>
-                                <p>Contract Address</p>
-                                <a href="https://testnet.bscscan.com/address/0x72bE3b77d298c42954611D624064917e8EA96B17">{nft.contract}</a>
-                            </div>
-                            <div className={styles.details}>
-                                <p>token ID</p>
-                                <p>{nft.tokenid}</p>
-                            </div>
-                            <div className={styles.details}>
-                                <p>token Standard</p>
-                                <p>ERC-721</p>
-                            </div>
-                            <div className={styles.details}>
-                                <p>Blockchain</p>
-                                <p>BSC testnet</p>
+            <div className="p-6">
+                <div className="columns">
+                    <div className="column">
+                        <div className={styles.nftcontent}>
+                            {nfts['price'] ? saleDetail() : <></>}
+                            <div className={styles.containerDetail}>
+                                <div className={styles.containerDetailHead}>
+                                    <p>Details</p>
+                                    <a href="https://testnet.bscscan.com/token/0x72bE3b77d298c42954611D624064917e8EA96B17" className="title is-size-6 mb-0 has-text-link is-underlined">Supported by CryptoViet</a>
+                                </div>
+                                <div className={styles.containerDetailBody}>
+                                    <div className="has-text-centered p-2">
+                                        <img src={nft['image']} style={{ height: "15rem", border: "1px solid #000000", borderRadius: "5px" }} />
+                                    </div>
+                                    <div className="pl-6 pr-6">
+                                        <div className="columns mb-3">
+                                            <div className="column">
+                                                <div>Name: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['name']}</div>
+                                            </div>
+                                            <div className="column">
+                                                <div>Description: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['description']}</div>
+                                            </div>
+                                        </div>
+                                        <div className="columns mb-3">
+                                            <div className="column">
+                                                <div>Token ID: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft.tokenid}</div>
+                                            </div>
+                                            <div className="column">
+                                                <div>Token Standard: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">ERC-721</div>
+                                            </div>
+                                        </div>
+                                        <div className="columns mb-3">
+                                            <div className="column">
+                                                <div>Blockchain Environtment: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">BSC Testnet</div>
+                                            </div>
+                                            <div className="column">
+                                                <div>Status: </div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-success">On bag</div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <div>Owned by: </div>
+                                            <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['owned']}</div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <div>Contract Address</div>
+                                            <div className="title is-size-6 has-text-weight-bold has-text-success">
+                                                <a href="https://testnet.bscscan.com/address/0x72bE3b77d298c42954611D624064917e8EA96B17">{nft.contract}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-            </div>
-        </div>
-        <CancelListingPopup />
-        <div id='myModal' className={styles.modal}>
-            <div className={styles.modalcontent}>
-                <div className={styles.modalhead}>
-                    <p className={styles.price}>Price</p>
-                    <div className={styles.modalbody}>
-                        <select className={styles.logo}
-                        value={value}
-                        onChange={e=>setValue(e.target.value)}>
-                            <option value="BNB">BNB</option>
-                            <option value="BOI">BOI</option>
-                        </select>
-                        <input type="number" placeholder="Amount" onChange={(e) => setPrice(Number(e.target.value))}/>
+                    <div className="column is-3">
+                        <Card shadow="sm" p="lg" radius="md" withBorder style={{ borderColor: "#000000" }}>
+                            <Card.Section>
+                                <img
+                                    src={nft.image}
+                                    height={160}
+                                />
+                            </Card.Section>
+
+                            <Group position="apart" mt="md" mb="xs">
+                                <Text weight={500}>{nft.name}</Text>
+                                <Badge color="pink" variant="light">
+                                    On Bag
+                                </Badge>
+                            </Group>
+
+                            <Text size="sm" color="dimmed">
+                                <div className="has-text-weight-bold">Description:</div>
+                                <div>{nft.description}</div>
+                                <div className="has-text-weight-bold">Address:</div>
+                                <div>0x72bE3b77d298c42954611D624064917e8EA96B17</div>
+                            </Text>
+                        </Card>
                     </div>
                 </div>
-                <button type="submit" className={styles.updatebtn} onClick={listToMarketplace}>Confirm listing</button>
-                <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
             </div>
-        </div>
-        <div id='myModalChange' className={styles.modal}>
-            <div className={styles.modalcontent}>
-                <div className={styles.modalhead}>
-                    <p className={styles.price}>Price</p>
-                    <div className={styles.modalbody}>
-                        <div className={styles.logo}>
-                            <Image src="/images/bnbcoin.png" width={20} height={30}/>
-                            <p>BNB</p>
+            <CancelListingPopup />
+            <div id='myModal' className={styles.modal}>
+                <div className={styles.modalcontent}>
+                    <div className={styles.modalhead}>
+                        <p className={styles.price}>Price</p>
+                        <div className={styles.modalbody}>
+                            <select className={styles.logo}
+                                value={value}
+                                onChange={e => setValue(e.target.value)}>
+                                <option value="BNB">BNB</option>
+                                <option value="BOI">BOI</option>
+                            </select>
+                            <input type="number" placeholder="Amount" onChange={(e) => setPrice(Number(e.target.value))} />
                         </div>
-                        <input type="number" placeholder="Amount" onChange={(e) => setPrice(Number(e.target.value))}/>
                     </div>
+                    <button type="submit" className={styles.updatebtn} onClick={listToMarketplace}>Confirm listing</button>
+                    <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
                 </div>
-                <button type="submit" className={styles.updatebtn} onClick={changePriceToSell}>Submit</button>
-                <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
             </div>
-        </div>
-        <div id='myModalWaiting' className={styles.modal}>
-            <div className={styles.modalcontent}>
-                <div className={styles.modalhead}>
-                    <p className={styles.price}>Complete your listing</p>
+            <div id='myModalChange' className={styles.modal}>
+                <div className={styles.modalcontent}>
+                    <div className={styles.modalhead}>
+                        <p className={styles.price}>Price</p>
+                        <div className={styles.modalbody}>
+                            <div className={styles.logo}>
+                                <Image src="/images/bnbcoin.png" width={20} height={30} />
+                                <p>BNB</p>
+                            </div>
+                            <input type="number" placeholder="Amount" onChange={(e) => setPrice(Number(e.target.value))} />
+                        </div>
+                    </div>
+                    <button type="submit" className={styles.updatebtn} onClick={changePriceToSell}>Submit</button>
+                    <button type="button" className={styles.deletebtn} onClick={closePopup}>Cancel</button>
                 </div>
-                {isWaiting ? <button disabled className={styles.waitingbtn}>Waiting for Approving</button> : (!isChange? btn() : btnChange())}
             </div>
-        </div>
-        {!isChange ? <div id='myModalFinished' className={styles.modal}>
-            <div className={styles.modalcontentFinished}>
-                <div className={styles.modalhead}>
-                    <p className={styles.price}>Your item has been listed!</p>
+            <div id='myModalWaiting' className={styles.modal}>
+                <div className={styles.modalcontent}>
+                    <div className={styles.modalhead}>
+                        <p className={styles.price}>Complete your listing</p>
+                    </div>
+                    {isWaiting ? <button disabled className={styles.waitingbtn}>Waiting for Approving</button> : (!isChange ? btn() : btnChange())}
                 </div>
-                <img className={styles.imgFinished} src={nft['image']}/>
-                <div>{nft['name']} has been listed for sale.</div>
-                <Link href="/posts/Marketplace">
-                    <input className={styles.viewlistingbtn} type="button" value="View Listing"/>
-                </Link>
             </div>
-        </div> : 
-        <div id='myModalFinished' className={styles.modal}>
-        <div className={styles.modalcontentFinished}>
-            <div className={styles.modalhead}>
-                <p className={styles.price}>Your item has been Update!</p>
-            </div>
-            <img className={styles.imgFinished} src={nft['image']}/>
-            <div>{nft['name']} has been listed for sale.</div>
-            <Link href="/posts/Marketplace">
-                <input className={styles.viewlistingbtn} type="button" value="View Listing"/>
-            </Link>
+            {!isChange ? <div id='myModalFinished' className={styles.modal}>
+                <div className={styles.modalcontentFinished}>
+                    <div className={styles.modalhead}>
+                        <p className={styles.price}>Your item has been listed!</p>
+                    </div>
+                    <img className={styles.imgFinished} src={nft['image']} />
+                    <div>{nft['name']} has been listed for sale.</div>
+                    <Link href="/posts/Marketplace">
+                        <input className={styles.viewlistingbtn} type="button" value="View Listing" />
+                    </Link>
+                </div>
+            </div> :
+                <div id='myModalFinished' className={styles.modal}>
+                    <div className={styles.modalcontentFinished}>
+                        <div className={styles.modalhead}>
+                            <p className={styles.price}>Your item has been Update!</p>
+                        </div>
+                        <img className={styles.imgFinished} src={nft['image']} />
+                        <div>{nft['name']} has been listed for sale.</div>
+                        <Link href="/posts/Marketplace">
+                            <input className={styles.viewlistingbtn} type="button" value="View Listing" />
+                        </Link>
+                    </div>
+                </div>}
         </div>
-    </div>}
-    </div>
-  )
+    )
 }

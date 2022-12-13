@@ -174,11 +174,15 @@ export default function MintNFT() {
                             <div className="column">
                                 <div className="p-4">
                                     <p className="title is-5 m-2 has-text-white">NFT Name</p>
-                                    <input className="input is-fullwidth has-background-info-light has-text-info has-text-weight-bold" type="text" placeholder="Name of NFT" value={name} onChange={(e) => setName(e.target.value)} />
+                                    <input className="input is-fullwidth has-background-info-light has-text-info has-text-weight-bold" 
+                                    type="text" placeholder="Name of NFT" value={name} 
+                                    onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className="p-4">
                                     <p className="title is-5 m-2 has-text-white">Description</p>
-                                    <input className="input is-fullwidth has-background-info-light has-text-info has-text-weight-bold" type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                    <input className="input is-fullwidth has-background-info-light has-text-info has-text-weight-bold" 
+                                    type="text" placeholder="Description" value={description} 
+                                    onChange={(e) => setDescription(e.target.value)} />
                                 </div>
                                 {currentAccount ? displayStatus() : <NotConnected />}
                                 <div className={styles.button}>

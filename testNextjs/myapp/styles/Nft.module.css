@@ -3,11 +3,22 @@
     margin: 0;
 }
 
+.detailsnftcontainer {
+    min-height: calc(100vh - 64px);
+    max-height: 100%;
+    background: linear-gradient(155deg,#000f3f, #843850, #0f022c);
+}
+
 .containerbtn {
     text-align: end;
     padding: 10px 20px;
-    background-color: rgb(225, 225, 225);
-    border-bottom: 1px solid rgb(194, 194, 194);
+    background: rgba(127, 127, 127, 0.496);
+}
+
+.sellBtnContainer {
+    position: fixed;
+    right: 2rem;
+    bottom: 1rem;
 }
 
 .sellbtn {
@@ -18,8 +29,8 @@
     line-height: 22px;
     letter-spacing: 0.01em;
     padding: 17px 24px;
-    background-color: rgb(32, 129, 226);
-    border: 2px solid rgb(32, 129, 226);
+    background-color: #e15757f5;
+    border: 2px solid #e15757ba;
     color: rgb(255, 255, 255);
     display: inline-flex;
     flex-direction: row;
@@ -76,10 +87,10 @@
 }
 
 .containerDetail {
-    margin: 70px;
+    /* margin: 70px; */
     background-color: rgb(233, 233, 233);
     border: 1px solid rgb(183, 183, 183);
-    width: 700px;
+    width: fit-content;
     border-radius: 12px;
     box-shadow: rgb(4 17 29 / 25%) 0px 0px 10px 0px;
 }
@@ -385,4 +396,19 @@
 .maincontainer {
     height: calc(100vh - 64px);
     padding-top: 5rem;
+}
+
+.isHidden {
+    display: none;
+}
+
+.exchangebackground {
+    height: calc(100vh - 64px);
+    padding: 3rem;
+    display: flex;
+    transition: all 1s ease-in-out;
+
+    background-image: url(/images/exchangebackground.gif);
+    background-repeat: no-repeat;
+    background-size: 100%;
 }
