@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
-import styles from "../../../styles/Nft.module.css"
+import styles from "../../styles/Nft.module.css"
 
 const coin = [
   { id: 1, name: 'BNB', unavailable: false },

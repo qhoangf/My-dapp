@@ -1,6 +1,6 @@
-import { contractABI, contractAddress } from "../../contract";
+import { contractABI, contractAddress } from "../contract";
 import { useEffect, useState } from "react";
-import styles from "../../styles/MintNft.module.css"
+import styles from "../styles/MintNft.module.css"
 import Link from "next/link";
 import Web3 from 'web3';
 import { create } from 'ipfs-http-client';
@@ -168,7 +168,7 @@ export default function MintNFT() {
                                     </div>
                                 </div>
                                 <figure class="image m-4 is-2by1">
-                                    <img src="null" id="imagePreview" />
+                                    <img src="null" id="imagePreview" style={{objectFit:"contain"}} />
                                 </figure>
                             </div>
                             <div className="column">

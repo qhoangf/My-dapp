@@ -1,4 +1,4 @@
-import styles from "../../styles/Nft.module.css"
+import styles from "../styles/Nft.module.css"
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import HorizontalTimeline from "react-horizontal-timeline";

@@ -5,7 +5,7 @@ export async function query({ query, values = [] }) {
         host: "localhost",
         database: "marketplace",
         user: "root",
-        password: "",
+        password: "1234",
     })
 
     try{

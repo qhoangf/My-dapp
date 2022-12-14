@@ -6,7 +6,7 @@
 .detailsnftcontainer {
     min-height: calc(100vh - 64px);
     max-height: 100%;
-    background: linear-gradient(155deg,#000f3f, #843850, #0f022c);
+    background: linear-gradient(155deg, #000f3f, #843850, #0f022c);
 }
 
 .containerbtn {
@@ -108,7 +108,7 @@
 }
 
 .containerDetailBody {
-    padding: 0px 20px 20px 20px;
+    padding: 0px 20px;
 }
 
 .details {
@@ -144,7 +144,7 @@
     padding: 10px;
     border: 1px solid #888;
     border-radius: 20px;
-    width: 80%;
+    width: fit-content;
     box-shadow: 0 4px 8px 0 rgba(28, 28, 28, 0.2), 0 6px 20px 0 rgba(38, 38, 38, 0.19);
     animation-name: animatetop;
     animation-duration: 0.4s;
@@ -203,7 +203,7 @@
     border: 2px solid rgb(32, 129, 226);
     color: rgb(255, 255, 255);
     border-radius: 12px;
-    margin: 20px 10px;
+    margin: 20px 0.25rem;
 }
 
 .deletebtn {
@@ -279,10 +279,9 @@
 
 .containerSale {
     display: block;
-    margin: 70px;
     background-color: rgb(233, 233, 233);
     border: 1px solid rgb(183, 183, 183);
-    width: 700px;
+    width: 100%;
     border-radius: 12px;
     box-shadow: rgb(4 17 29 / 25%) 0px 0px 10px 0px;
 }

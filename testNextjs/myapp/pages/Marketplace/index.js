@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from "../../../styles/Marketplace.module.css"
+import styles from "../../styles/Marketplace.module.css"
 
 export default function Marketplace() {
     const urlApiEndpoit = "http://localhost:3000/api/getNftData-lib"
     const [nfts, setNfts] = useState([])
     const [type, setType] = useState()
-
+    
     useEffect(() => {
         async function getData(){
             const request = await fetch(urlApiEndpoit)
@@ -19,13 +19,11 @@ export default function Marketplace() {
 
   return (
     <div className={styles.container}>
-        <div>
-            <h1>Marketplace</h1>
-        </div>
-        <div className={styles.nftcontainer}>
+        <div className="title is-size-5 p-4 mb-0">Marketplace</div>
+        <div className="columns is-multiline">
             {nfts.map(item => {
                 return(
-                    <Link href={item.contract_address + "/" + item.tokenid}>
+                    <Link className="column is-3" href={item.contract_address + "/" + item.tokenid}>
                         <div className={styles.nftcard}>
                             <img src={item.image}/>
                             <p className={styles.name}>{item.name}</p>

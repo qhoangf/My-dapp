@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import Web3 from 'web3';
-import { contractABI, contractAddress, marketplaceAddress, marketplaceABI, ERC20Address, ERC20ABI } from "../../../contract";
+import { contractABI, contractAddress, marketplaceAddress, marketplaceABI, ERC20Address, ERC20ABI } from "../../contract";
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import styles from '../../../styles/Nft.module.css';
+import styles from '../../styles/Nft.module.css';
 import Image from 'next/image';
 import { ethers } from "ethers";
 import Link from "next/link";
@@ -391,16 +391,42 @@ export default function Detail() {
         )
     }
 
+    const showOffDetail = () => {
+        return (
+            <div id="saleDetail" className={styles.containerSale}>
+                <div className={styles.containerDetailHead}>
+                    <p>Details</p>
+                </div>
+                <div className={styles.containerDetailBody}>
+                    <div>Blockchain Environtment: </div>
+                    <div className="title is-size-6 has-text-weight-bold mb-0 pb-2">BSC Testnet</div>
+                    <div>Status: </div>
+                    <div className="title is-size-6 has-text-weight-bold mb-0 pb-2 has-text-success">On bag</div>
+                    <div>Owned by: </div>
+                    <div className="title is-size-6 has-text-weight-bold has-text-info mb-0 pb-2">{nft['owned']}</div>
+                    <div>Contract Address</div>
+                    <div className="title is-size-6 has-text-weight-bold has-text-info mb-0 pb-4">
+                        <a href="https://testnet.bscscan.com/address/0x72bE3b77d298c42954611D624064917e8EA96B17">{nft.contract}</a>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     const saleDetail = () => {
         const sellBtn = document.getElementById('sellBtn')
         sellBtn.style.display = "none"
         return (
             <div id="saleDetail" className={styles.containerSale}>
                 <div className={styles.containerDetailHead}>
-                    <p>Sale ends</p>
+                    <p>Sale Information</p>
                 </div>
                 <div className={styles.containerDetailBody}>
-                    <div className={styles.detailsSale}>
+                    <div className="pb-1">Blockchain Environtment: </div>
+                    <div className="title is-size-6 has-text-weight-bold mb-0 pb-2">BSC Testnet</div>
+                    <div className="pb-0">Status: </div>
+                    <div className="title is-size-6 has-text-weight-bold has-text-danger mb-0 pb-2">On Sale</div>
+                    <div className="pb-1">
                         <p>Current price</p>
                     </div>
                     <div className={styles.detailsSale}>
@@ -424,57 +450,37 @@ export default function Detail() {
             </div>
             <div className="p-6">
                 <div className="columns">
-                    <div className="column">
+                    <div className="column pr-5 is-narrow">
                         <div className={styles.nftcontent}>
-                            {nfts['price'] ? saleDetail() : <></>}
                             <div className={styles.containerDetail}>
                                 <div className={styles.containerDetailHead}>
-                                    <p>Details</p>
+                                    <p>NFT Product</p>
                                     <a href="https://testnet.bscscan.com/token/0x72bE3b77d298c42954611D624064917e8EA96B17" className="title is-size-6 mb-0 has-text-link is-underlined">Supported by CryptoViet</a>
                                 </div>
                                 <div className={styles.containerDetailBody}>
                                     <div className="has-text-centered p-2">
                                         <img src={nft['image']} style={{ height: "15rem", border: "1px solid #000000", borderRadius: "5px" }} />
                                     </div>
-                                    <div className="pl-6 pr-6">
+                                    <div className="pl-2 pr-2">
                                         <div className="columns mb-3">
                                             <div className="column">
                                                 <div>Name: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['name']}</div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-primary-dark">{nft['name']}</div>
                                             </div>
                                             <div className="column">
                                                 <div>Description: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['description']}</div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-primary-dark">{nft['description']}</div>
                                             </div>
                                         </div>
                                         <div className="columns mb-3">
                                             <div className="column">
                                                 <div>Token ID: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">{nft.tokenid}</div>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-primary-dark">{nft.tokenid}</div>
+
                                             </div>
                                             <div className="column">
                                                 <div>Token Standard: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">ERC-721</div>
-                                            </div>
-                                        </div>
-                                        <div className="columns mb-3">
-                                            <div className="column">
-                                                <div>Blockchain Environtment: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">BSC Testnet</div>
-                                            </div>
-                                            <div className="column">
-                                                <div>Status: </div>
-                                                <div className="title is-size-6 has-text-weight-bold has-text-success">On bag</div>
-                                            </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <div>Owned by: </div>
-                                            <div className="title is-size-6 has-text-weight-bold has-text-success">{nft['owned']}</div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <div>Contract Address</div>
-                                            <div className="title is-size-6 has-text-weight-bold has-text-success">
-                                                <a href="https://testnet.bscscan.com/address/0x72bE3b77d298c42954611D624064917e8EA96B17">{nft.contract}</a>
+                                                <div className="title is-size-6 has-text-weight-bold has-text-primary-dark">ERC-721</div>
                                             </div>
                                         </div>
                                     </div>
@@ -482,29 +488,8 @@ export default function Detail() {
                             </div>
                         </div>
                     </div>
-                    <div className="column is-3">
-                        <Card shadow="sm" p="lg" radius="md" withBorder style={{ borderColor: "#000000" }}>
-                            <Card.Section>
-                                <img
-                                    src={nft.image}
-                                    height={160}
-                                />
-                            </Card.Section>
-
-                            <Group position="apart" mt="md" mb="xs">
-                                <Text weight={500}>{nft.name}</Text>
-                                <Badge color="pink" variant="light">
-                                    On Bag
-                                </Badge>
-                            </Group>
-
-                            <Text size="sm" color="dimmed">
-                                <div className="has-text-weight-bold">Description:</div>
-                                <div>{nft.description}</div>
-                                <div className="has-text-weight-bold">Address:</div>
-                                <div>0x72bE3b77d298c42954611D624064917e8EA96B17</div>
-                            </Text>
-                        </Card>
+                    <div className="column">
+                        {nfts['price'] ? saleDetail() : showOffDetail()}
                     </div>
                 </div>
             </div>

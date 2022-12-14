@@ -176,34 +176,34 @@ export default function NavBar() {
                 <Link href="/">
                     <a className={styles.navbarItem}>Home</a>
                 </Link>
-                <Link href="/posts/first-post">
+                <Link href="/first-post">
                     <a className={styles.navbarItem}>Exchange</a>
                 </Link>
                 <div className={styles.dropdown}>
                   <button className={styles.dropbtn}>NFT</button>
                   <div className={styles.dropdowncontent}>
-                    <a href="/posts/MintNFT">Mint NFT</a>
-                    <a href="/posts/YourNFT">Your NFT</a>
-                    <a href="/posts/Marketplace">Marketpalce</a>
+                    <a href="/MintNFT">Mint NFT</a>
+                    <a href="/YourNFT">Your NFT</a>
+                    <a href="/Marketplace">Marketpalce</a>
                   </div>
                 </div>
             </div> */}
       </div>
       <div className="is-flex">
         <div className={styles.navbarMenu}>
-          <Link href="/posts/first-post">
+          <Link href="/exchange">
             <a className={styles.navbarItem}>Exchange</a>
           </Link>
           <div className={styles.dropdown}>
             <div className={styles.navbarItem}>NFT</div>
             <div className={styles.dropdowncontent}>
-              <Link href="/posts/MintNFT">
+              <Link href="/MintNFT">
                 <div className={styles.dropdownitems}>Mint NFT</div>
               </Link>
-              <Link href="/posts/YourNFT">
+              <Link href="/YourNFT">
                 <div className={styles.dropdownitems}>Your NFT</div>
               </Link>
-              <Link href="/posts/Marketplace">
+              <Link href="/Marketplace">
                 <div className={styles.dropdownitems}>Marketpalce</div>
               </Link>
             </div>

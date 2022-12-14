@@ -1,8 +1,8 @@
-import { contractABI, contractAddress } from "../../../contract";
+import { contractABI, contractAddress } from "../../contract";
 import { useEffect, useState } from 'react';
 import Web3 from "web3"
 import axios from 'axios'
-import styles from "../../../styles/YourNFT.module.css"
+import styles from "../../styles/YourNFT.module.css"
 import Link from "next/link";
 import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
 
