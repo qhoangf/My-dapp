@@ -1,14 +1,17 @@
 import Layout from "../components/layout";
 import "bulma/css/bulma.css";
 import "../styles/globals.css";
+import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      <div className="maincontent">
-        <Component {...pageProps} />
-      </div>
-    </Layout>
+    <ThirdwebProvider desiredChainId={ChainId.BinanceSmartChainTestnet}>
+      <Layout>
+        <div className="maincontent">
+          <Component {...pageProps} />
+        </div>
+      </Layout>
+    </ThirdwebProvider>
   );
 }
 
