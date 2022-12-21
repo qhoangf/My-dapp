@@ -30,6 +30,9 @@ export default function firstpost() {
   const [nftArray, setNftArray] = useState([]);
   const [isFinish, setIsFinish] = useState(false);
 
+  const [selectedSlide, setSelectedSlide] = useState("");
+
+
   // CREATE FUNCTION
   const nextStep = () =>
     setActive((currentStep) => {
@@ -123,12 +126,14 @@ export default function firstpost() {
   function renderCaroudselSlide() {
     if (nftArray.length > 0) {
       let renderedHtml = nftArray.map((nftInfo) => (
-        <Carousel.Slide className="">
-          <Paper
-            onClick={(e) => {
-              console.log(nftInfo);
-              alert(`${nftInfo.name} is chosen!`);
+        <Carousel.Slide className="carousel-slide" style={{ cursor: "pointer" }}>
+          <Paper 
+            className={`${styles.paperCarouselSlide} ${selectedSlide == `selectedSlide${nftInfo.tokenid}` ? styles.selectedslide : ""}`}
 
+            onClick={(e) => {
+              console.log("onclick renderCaroudselSlide", nftInfo);
+
+              setSelectedSlide(`selectedSlide${nftInfo.tokenid}`)
               setSrcNftImg(nftInfo.image);
               setNameNft(nftInfo.name);
             }}
@@ -139,7 +144,7 @@ export default function firstpost() {
                   <img className="srcNftImg" src={nftInfo.image}></img>
                 </div>
               </div>
-              <div className="card-content p-2 nameNft">{nftInfo.name}</div>
+              <div className={`${styles.customizeCardContent} card-content p-2 nameNft`}>{nftInfo.name}</div>
             </div>
           </Paper>
         </Carousel.Slide>
@@ -147,6 +152,10 @@ export default function firstpost() {
       return renderedHtml;
     } else return;
   }
+
+  useEffect(() => {
+
+  })
 
   return (
     <div>
@@ -223,7 +232,7 @@ export default function firstpost() {
                         </button>
                       </div>
                     ) : nftArray.length > 0 ? (
-                      <Carousel
+                      <Carousel className={styles.customizeCarousel}
                         withIndicators
                         height={200}
                         slideSize="33.333333%"
