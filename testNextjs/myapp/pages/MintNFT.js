@@ -183,9 +183,9 @@ export default function MintNFT() {
                 </div>
                 <figure class="image m-4 is-2by1">
                   <img
-                    src="null"
+                    src="https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg"
                     id="imagePreview"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "fill" }}
                   />
                 </figure>
               </div>

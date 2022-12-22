@@ -10,6 +10,7 @@ import NotConnected from "../components/notConnected";
 import { useNetworkMismatch } from "@thirdweb-dev/react";
 import { IconWallet } from "@tabler/icons";
 import SwitchNetwork from "../components/switchNetwork";
+import { nftContract } from "../contract";
 
 export default function firstpost() {
   const address = useAddress();
@@ -24,6 +25,7 @@ export default function firstpost() {
 
   const [srcNftImgValue, setSrcNftImg] = useState("");
   const [nameNftValue, setNameNft] = useState("");
+  const [tokenId, setTokenId] = useState(0);
 
   const [iscompleted, setTransactionProcess] = useState(false);
 
@@ -31,7 +33,6 @@ export default function firstpost() {
   const [isFinish, setIsFinish] = useState(false);
 
   const [selectedSlide, setSelectedSlide] = useState("");
-
 
   // CREATE FUNCTION
   const nextStep = () =>
@@ -53,7 +54,7 @@ export default function firstpost() {
           }
           return currentStep;
         case 2:
-          setFinalStep(true);
+          currentStep = currentStep < 3 ? currentStep + 1 : currentStep;
         default:
           currentStep = currentStep < 3 ? currentStep + 1 : currentStep;
           return currentStep;
@@ -72,15 +73,25 @@ export default function firstpost() {
     }
   }, [address]);
 
-  function processTransaction() {
-    if (active == 3) {
-      setTimeout(function () {
+  async function processTransaction() {
+    if (active === 3) {
+      const response = await nftContract.methods
+        .safeTransferFrom(address, receiver, tokenId)
+        .send({ from: address })
+        .catch((err) => {
+          alert("Tranfer faild, please try again!");
+          setActive(0);
+          return;
+        });
+
+      if (response) {
         setTransactionProcess(true);
-      }, 2000);
+      }
     }
   }
 
   let setLoadingTransaction = () => {
+    processTransaction();
     return (
       <>
         <div>
@@ -96,12 +107,12 @@ export default function firstpost() {
             </button>
           </div>
         </div>
-        <div>{processTransaction()}</div>
       </>
     );
   };
 
   let setCompletedTransaction = () => {
+    setActive(0);
     return (
       <>
         <div className="has-text-centered title is-size-5 mb-0 mt-3">
@@ -126,16 +137,21 @@ export default function firstpost() {
   function renderCaroudselSlide() {
     if (nftArray.length > 0) {
       let renderedHtml = nftArray.map((nftInfo) => (
-        <Carousel.Slide className="carousel-slide" style={{ cursor: "pointer" }}>
-          <Paper 
-            className={`${styles.paperCarouselSlide} ${selectedSlide == `selectedSlide${nftInfo.tokenid}` ? styles.selectedslide : ""}`}
-
+        <Carousel.Slide
+          className="carousel-slide"
+          style={{ cursor: "pointer" }}
+        >
+          <Paper
+            className={`${styles.paperCarouselSlide} ${
+              selectedSlide == `selectedSlide${nftInfo.tokenid}`
+                ? styles.selectedslide
+                : ""
+            }`}
             onClick={(e) => {
-              console.log("onclick renderCaroudselSlide", nftInfo);
-
-              setSelectedSlide(`selectedSlide${nftInfo.tokenid}`)
+              setSelectedSlide(`selectedSlide${nftInfo.tokenid}`);
               setSrcNftImg(nftInfo.image);
               setNameNft(nftInfo.name);
+              setTokenId(nftInfo.tokenid);
             }}
           >
             <div className="card nftChosenCard">
@@ -144,7 +160,11 @@ export default function firstpost() {
                   <img className="srcNftImg" src={nftInfo.image}></img>
                 </div>
               </div>
-              <div className={`${styles.customizeCardContent} card-content p-2 nameNft`}>{nftInfo.name}</div>
+              <div
+                className={`${styles.customizeCardContent} card-content p-2 nameNft`}
+              >
+                {nftInfo.name}
+              </div>
             </div>
           </Paper>
         </Carousel.Slide>
@@ -153,9 +173,7 @@ export default function firstpost() {
     } else return;
   }
 
-  useEffect(() => {
-
-  })
+  useEffect(() => {});
 
   return (
     <div>
@@ -232,7 +250,8 @@ export default function firstpost() {
                         </button>
                       </div>
                     ) : nftArray.length > 0 ? (
-                      <Carousel className={styles.customizeCarousel}
+                      <Carousel
+                        className={styles.customizeCarousel}
                         withIndicators
                         height={200}
                         slideSize="33.333333%"
@@ -301,7 +320,7 @@ export default function firstpost() {
                     </div>
                   </Stepper.Completed>
                 </Stepper>
-                {!finalstep ? (
+                {active != 2 ? (
                   <Group position="center" mt="xl">
                     <Button
                       className="backButton"
@@ -314,8 +333,34 @@ export default function firstpost() {
                       Next
                     </Button>
                   </Group>
+                ) : !iscompleted ? (
+                  <Group position="center" mt="xl">
+                    <Button
+                      className="backButton"
+                      variant="default"
+                      onClick={prevStep}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      className="nextButton"
+                      onClick={() => {
+                        nextStep();
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </Group>
                 ) : (
-                  <></>
+                  <Group position="center" mt="xl">
+                    <Button
+                      className="backButton"
+                      variant="default"
+                      onClick={setActive(0)}
+                    >
+                      Back
+                    </Button>
+                  </Group>
                 )}
               </div>
             ) : (
