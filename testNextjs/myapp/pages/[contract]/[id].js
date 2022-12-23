@@ -16,7 +16,21 @@ import { ethers } from "ethers";
 import Link from "next/link";
 import CancelListingPopup from "./cancelListing";
 import { useAddress, useNetworkMismatch } from "@thirdweb-dev/react";
-import { Card, Text, Badge, Button, Group } from "@mantine/core";
+import {
+  Card,
+  Text,
+  Badge,
+  Button,
+  Group,
+  ScrollArea,
+  Table,
+} from "@mantine/core";
+import {
+  IconStars,
+  IconTruckDelivery,
+  IconArrowsExchange,
+} from "@tabler/icons";
+import moment from "moment/moment";
 
 let web3 = new Web3(Web3.givenProvider);
 
@@ -39,8 +53,12 @@ export default function Detail() {
   const [isWaiting, setIsWaiting] = useState(true);
   const [nfts, setNfts] = useState([]);
   const [isChange, setIsChange] = useState(false);
+  const [activity, setActivity] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingBuy, setLoadingBuy] = useState(false);
+
   const urlApiEndpoit = "http://localhost:3000/api/insertNftData-lib";
-  const urlApiEndpointGetData = "http://localhost:3000/api/getNftData-lib";
+  const urlApiEndpointGetData = "http://localhost:3000/api/getNftDataById";
   const urlApiEndpointDeleteData =
     "http://localhost:3000/api/deleteNftData-lib";
   const urlApiEndpointUpdateData =
@@ -51,21 +69,146 @@ export default function Detail() {
   }
 
   async function getData() {
-    const res = await fetch(urlApiEndpointGetData);
+    const res = await fetch(urlApiEndpointGetData + `?tokenid=${tokenId}`);
     const req = await res.json();
-    const request = req.data;
-    request.map((item) => {
-      if (Number(tokenId) == Number(item["tokenid"])) {
-        const datanft = {
-          coupon: item["coupon"],
-          price: item["price"],
-          owner: item["owner"],
-          typecoin: item["typecoin"],
-        };
-        setNfts(datanft);
-      }
-    });
+    const data = req.data;
+    if (data.length > 0) {
+      const datanft = {
+        coupon: data[0]["coupon"],
+        price: data[0]["price"],
+        owner: data[0]["owner"],
+        typecoin: data[0]["typecoin"],
+      };
+      setNfts(datanft);
+    }
   }
+
+  async function getActivity() {
+    setLoading(true);
+    const response = await axios.get(
+      `https://api.covalenthq.com/v1/97/tokens/0x72bE3b77d298c42954611D624064917e8EA96B17/nft_transactions/${tokenId}/?quote-currency=USD&format=JSON&key=ckey_6f3f68a7d56546f082fb27bcc73`
+    );
+    const data = response.data;
+    const { nft_transactions } = data.data.items[0];
+    const transferArray = [];
+    if (nft_transactions.length > 0) {
+      nft_transactions.map((item) => {
+        const record = {
+          type: "",
+          value: item.value,
+          typeCoin: "BNB",
+          timestamp: "",
+          transfer: {},
+        };
+        if (item.log_events.length === 2) {
+          record.type = "Transfer";
+          for (let i = 0; i < item.log_events.length; i++) {
+            if (item.log_events[i].decoded.name === "Transfer") {
+              record.transfer = item.log_events[i].decoded.params;
+            }
+          }
+        } else {
+          record.type = "Sale";
+          for (let i = 0; i < item.log_events.length; i++) {
+            if (
+              item.log_events[i].decoded !== null &&
+              item.log_events[i].decoded.name === "Transfer"
+            ) {
+              if (
+                item.log_events[i].decoded.params[0].value ===
+                "0x0000000000000000000000000000000000000000"
+              ) {
+                record.type = "Minted";
+              }
+
+              if (item.log_events[i].decoded.params[2].name === "value") {
+                record.value = item.log_events[i].decoded.params[2].value;
+                record.typeCoin = "BOI";
+                break;
+              }
+
+              record.transfer = item.log_events[i].decoded.params;
+            }
+          }
+        }
+        record.timestamp = item.block_signed_at;
+        transferArray.push(record);
+      });
+    }
+    console.log(transferArray);
+    setActivity(transferArray);
+    setLoading(false);
+  }
+
+  const displayActivity = () => {
+    return (
+      <>
+        {loading ? (
+          <></>
+        ) : (
+          activity.map((item) => {
+            let Icon = IconStars;
+            if (item.type === "Minted") {
+              Icon = IconStars;
+            } else if (item.type === "Transfer") {
+              Icon = IconArrowsExchange;
+            } else {
+              Icon = IconTruckDelivery;
+            }
+            return (
+              <tr>
+                <td>
+                  {item.type === "Minted" ? (
+                    <Group>
+                      <Icon size={5} stroke={1.5} />{" "}
+                      <Text size="sm">Minted</Text>
+                    </Group>
+                  ) : item.type === "Transfer" ? (
+                    <Group>
+                      <Icon size={5} stroke={1.5} />{" "}
+                      <Text size="sm">Transfer</Text>
+                    </Group>
+                  ) : (
+                    <Group>
+                      <Icon size={5} stroke={1.5} /> <Text size="sm">Sale</Text>
+                    </Group>
+                  )}
+                </td>
+                <td>
+                  {item.type === "Transfer" ? (
+                    ""
+                  ) : (
+                    <Group>
+                      <Text size="sm">
+                        {web3.utils.fromWei(item.value, "ether")}
+                      </Text>
+
+                      <Text size="sm" c="dimmed">
+                        {item.typeCoin === "BNB" ? "BNB" : "BOI"}
+                      </Text>
+                    </Group>
+                  )}
+                </td>
+                <td>
+                  <Text size="sm">
+                    {item.type === "Minted"
+                      ? "NullAddress"
+                      : item.transfer[0].value}
+                  </Text>
+                </td>
+                <td>
+                  <Text size="sm">{item.transfer[1].value}</Text>
+                </td>
+                <td>
+                  <Text size="sm">{moment(item.timestamp).fromNow()}</Text>
+                </td>
+              </tr>
+            );
+          })
+        )}
+      </>
+    );
+  };
 
   const getNFTDataByTokenId = async () => {
     const total = await contract.methods.totalSupply().call();
@@ -99,6 +242,7 @@ export default function Detail() {
     if (tokenId && isMismatched === false) {
       getData();
       getNFTDataByTokenId();
+      getActivity();
     }
   }, [address, contract_address, tokenId]);
 
@@ -259,6 +403,7 @@ export default function Detail() {
   }
 
   async function verify() {
+    setLoadingBuy(true);
     let coupon = nfts["coupon"];
     let price = nfts["price"];
     let seller = nfts["owner"];
@@ -294,6 +439,7 @@ export default function Detail() {
               alert(
                 "MetaMask Message Signature: User denied message signature."
               );
+              setLoadingBuy(false);
             }
           });
       } else {
@@ -320,6 +466,7 @@ export default function Detail() {
                 alert(
                   "MetaMask Message Signature: User denied message signature."
                 );
+                setLoadingBuy(false);
               }
             });
         } else {
@@ -330,6 +477,7 @@ export default function Detail() {
               .send({ from: address })
               .catch((e) => {
                 alert(e.message);
+                setLoadingBuy(false);
               });
 
             if (approve) {
@@ -350,6 +498,7 @@ export default function Detail() {
                     alert(
                       "MetaMask Message Signature: User denied message signature."
                     );
+                    setLoadingBuy(false);
                   }
                 });
             }
@@ -369,6 +518,7 @@ export default function Detail() {
         const req = await request.json();
         console.log(req.message);
         alert("Buy successful!");
+        setLoadingBuy(false);
       }
 
       //await transaction.wait();
@@ -525,13 +675,15 @@ export default function Detail() {
             {Number(nft["owned"]) == Number(address) ? (
               CancelListing()
             ) : (
-              <button
-                type="submit"
-                className={styles.updatebtn}
+              <Button
+                size="lg"
+                m="md"
+                radius="md"
+                loading={loadingBuy}
                 onClick={verify}
               >
                 Buy now
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -614,6 +766,36 @@ export default function Detail() {
           <div className="column">
             {nfts["price"] ? saleDetail() : showOffDetail()}
           </div>
+        </div>
+        <div id="saleDetail" className={styles.containerSale}>
+          <div className={styles.containerDetailHead}>
+            <p>Item Activity</p>
+          </div>
+
+          <ScrollArea
+            style={{ height: 200 }}
+            type="scroll"
+            offsetScrollbars
+            p="xs"
+          >
+            <Table
+              striped
+              fontSize="lg"
+              horizontalSpacing="lg"
+              verticalSpacing="md"
+            >
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Price</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>{displayActivity()}</tbody>
+            </Table>
+          </ScrollArea>
         </div>
       </div>
       <CancelListingPopup />
@@ -709,7 +891,7 @@ export default function Detail() {
             </div>
             <img className={styles.imgFinished} src={nft["image"]} />
             <div>{nft["name"]} has been listed for sale.</div>
-            <Link href="/posts/Marketplace">
+            <Link href="/Marketplace">
               <input
                 className={styles.viewlistingbtn}
                 type="button"
@@ -726,7 +908,7 @@ export default function Detail() {
             </div>
             <img className={styles.imgFinished} src={nft["image"]} />
             <div>{nft["name"]} has been listed for sale.</div>
-            <Link href="/posts/Marketplace">
+            <Link href="/Marketplace">
               <input
                 className={styles.viewlistingbtn}
                 type="button"
