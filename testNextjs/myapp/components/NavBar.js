@@ -1,9 +1,13 @@
 import Image from "next/image";
-import image from "../public/images/exchangeLogo.png";
+import image from "../public/images/exchangeLogo2NoBackground.png";
 import styles from "../styles/Navbar.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { marketplaceAddress, marketplaceABI } from "../contract";
+import { Autocomplete } from '@mantine/core';
+import { Input } from '@mantine/core';
+import { IconSearch } from '@tabler/icons';
+
 import {
   useAddress,
   useNetworkMismatch,
@@ -157,30 +161,22 @@ export default function NavBar() {
       <div className={styles.navbarHead}>
         <Link href="/">
           <Image
-            className={styles.exchangelogo}
+            className={`${styles.exchangelogo}`}
             priority
             src={image}
-            width={140}
+            width={135}
             height={50}
             alt="logo"
+            style={{
+              cursor: "pointer",
+            }}
           />
         </Link>
-        {/* <div className={styles.navbarMenu}>
-                <Link href="/">
-                    <a className={styles.navbarItem}>Home</a>
-                </Link>
-                <Link href="/first-post">
-                    <a className={styles.navbarItem}>Exchange</a>
-                </Link>
-                <div className={styles.dropdown}>
-                  <button className={styles.dropbtn}>NFT</button>
-                  <div className={styles.dropdowncontent}>
-                    <a href="/MintNFT">Mint NFT</a>
-                    <a href="/YourNFT">Your NFT</a>
-                    <a href="/Marketplace">Marketpalce</a>
-                  </div>
-                </div>
-            </div> */}
+        <Input
+          className={`${styles.customizeAutocompleteInput} ml-6`}
+          icon={<IconSearch />}
+          placeholder="Wallet address searching..."
+        />
       </div>
       <div className="is-flex">
         <div className={styles.navbarMenu}>
