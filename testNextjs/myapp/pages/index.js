@@ -79,7 +79,12 @@ export default function Home() {
 
       <section className='section set-section1-background'>
         <div className='columns'>
-          <div className='column has-text-centered m-6 p-0 has-border-frame-10px-primary'>
+          <div className='column has-text-centered m-6 p-0 has-border-frame-10px-primary' style={{
+              "border": "10px solid",
+              "border-image-slice": "1 !important",
+              "border-image-source": "linear-gradient(to left bottom, #6a5af9, #3b85ac, #479bc7) !important",
+              "border-bottom": "none",
+          }}>
             <Image src={nftintro} height={650} width={800} />
           </div>
           <div className='column has-text-left p-6 mt-6 mr-6 mb-6'>
