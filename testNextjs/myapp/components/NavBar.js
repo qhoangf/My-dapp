@@ -3,10 +3,10 @@ import image from "../public/images/exchangeLogo2NoBackground.png";
 import styles from "../styles/Navbar.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { marketplaceAddress, marketplaceABI } from "../contract";
-import { Autocomplete } from '@mantine/core';
-import { Input } from '@mantine/core';
-import { IconSearch } from '@tabler/icons';
+import { marketplaceAddress, marketplaceABI, nftContract } from "../contract";
+import { Autocomplete } from "@mantine/core";
+import { TextInput, Loader } from "@mantine/core";
+import { IconSearch } from "@tabler/icons";
 
 import {
   useAddress,
@@ -15,14 +15,18 @@ import {
   useDisconnect,
 } from "@thirdweb-dev/react";
 import Web3 from "web3";
+import { useRouter } from "next/router";
 
 let web3 = new Web3(Web3.givenProvider);
 
 export default function NavBar() {
   const [proceeds, setProceeds] = useState();
   const [waiting, setWaiting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [proceedsErc20, setProceedsErc20] = useState();
+  const [tokenId, setTokenId] = useState(null);
   const address = useAddress();
+  const router = useRouter();
   const isMismatched = useNetworkMismatch();
   const connectWithMetamask = useMetamask();
   const disconnect = useDisconnect();
@@ -123,6 +127,36 @@ export default function NavBar() {
     }
   }
 
+  const getNftById = async (el) => {
+    try {
+      if (el.code === "Enter") {
+        if (tokenId) {
+          if (Number.isInteger(Number(tokenId))) {
+            setLoading(true);
+            //get total supply
+            const total = await nftContract.methods.totalSupply().call();
+            if (Number(tokenId) <= Number(total)) {
+              setLoading(false);
+
+              router.push(
+                `/0x72bE3b77d298c42954611D624064917e8EA96B17/${tokenId}`
+              );
+            } else {
+              router.push("/404");
+            }
+
+            setLoading(false);
+          } else {
+            router.push("/404");
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (address && isMismatched === false) {
       getProceeds();
@@ -172,10 +206,14 @@ export default function NavBar() {
             }}
           />
         </Link>
-        <Input
+        <TextInput
           className={`${styles.customizeAutocompleteInput} ml-6`}
           icon={<IconSearch />}
-          placeholder="Wallet address searching..."
+          rightSection={loading ? <Loader size="xs" /> : <></>}
+          placeholder="NFT id searching..."
+          onChange={(value) => setTokenId(value.currentTarget.value)}
+          onKeyDown={(value) => getNftById(value)}
+          disabled={loading}
         />
       </div>
       <div className="is-flex">
