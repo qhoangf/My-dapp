@@ -27,7 +27,7 @@
     "bulma": "^0.9.4",
     "bulma-extensions": "^6.2.7",
     "cardinal": "^2.1.1",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "embla-carousel-react": "^7.0.5",
     "ethers": "^5.7.2",
     "fs-extra": "^10.1.0",
