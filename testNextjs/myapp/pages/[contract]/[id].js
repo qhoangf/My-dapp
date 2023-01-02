@@ -619,20 +619,20 @@ export default function Detail() {
         <div className={styles.containerDetailHead}>
           <p>Details</p>
         </div>
-        <div className={styles.containerDetailBody}>
-          <div>Blockchain Environtment: </div>
+        <div className={`${styles.containerDetailBody} p-4`}>
+          <div className="pb-2">Blockchain Environtment: </div>
           <div className="title is-size-6 has-text-weight-bold mb-0 pb-2">
             BSC Testnet
           </div>
-          <div>Status: </div>
+          <div className="pb-2">Status: </div>
           <div className="title is-size-6 has-text-weight-bold mb-0 pb-2 has-text-success">
             On bag
           </div>
-          <div>Owned by: </div>
+          <div className="pb-2">Owned by: </div>
           <div className="title is-size-6 has-text-weight-bold has-text-info mb-0 pb-2">
             {nft["owned"]}
           </div>
-          <div>Contract Address</div>
+          <div className="pb-2">Contract Address</div>
           <div className="title is-size-6 has-text-weight-bold has-text-info mb-0 pb-4">
             <a href="https://testnet.bscscan.com/address/0x72bE3b77d298c42954611D624064917e8EA96B17">
               {nft.contract}
@@ -651,16 +651,16 @@ export default function Detail() {
         <div className={styles.containerDetailHead}>
           <p>Sale Information</p>
         </div>
-        <div className={styles.containerDetailBody}>
-          <div className="pb-1">Blockchain Environtment: </div>
+        <div className={`${styles.containerDetailBody} p-4`}>
+          <div className="pb-2">Blockchain Environtment: </div>
           <div className="title is-size-6 has-text-weight-bold mb-0 pb-2">
             BSC Testnet
           </div>
-          <div className="pb-0">Status: </div>
+          <div className="pb-2">Status: </div>
           <div className="title is-size-6 has-text-weight-bold has-text-danger mb-0 pb-2">
             On Sale
           </div>
-          <div className="pb-1">
+          <div className="pb-2">
             <p>Current price</p>
           </div>
           <div className={styles.detailsSale}>
@@ -671,7 +671,10 @@ export default function Detail() {
             )}
             <h1>{nfts["price"]}</h1>
           </div>
-          <div>
+          <div style={{
+            position: "absolute",
+            bottom: "0",
+          }}>
             {Number(nft["owned"]) == Number(address) ? (
               CancelListing()
             ) : (
@@ -705,6 +708,36 @@ export default function Detail() {
         )}
       </div>
       <div className="p-6">
+      <div id="saleDetail" className={`${styles.containerSale} mb-6`}>
+          <div className={styles.containerDetailHead}>
+            <p>History Activity</p>
+          </div>
+
+          <ScrollArea
+            style={{ height: 200 }}
+            type="scroll"
+            offsetScrollbars
+            p="xs"
+          >
+            <Table
+              striped
+              fontSize="lg"
+              horizontalSpacing="lg"
+              verticalSpacing="md"
+            >
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Price</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>{displayActivity()}</tbody>
+            </Table>
+          </ScrollArea>
+        </div>
         <div className="columns">
           <div className="column pr-5 is-narrow">
             <div className={styles.nftcontent}>
@@ -766,36 +799,6 @@ export default function Detail() {
           <div className="column">
             {nfts["price"] ? saleDetail() : showOffDetail()}
           </div>
-        </div>
-        <div id="saleDetail" className={styles.containerSale}>
-          <div className={styles.containerDetailHead}>
-            <p>Item Activity</p>
-          </div>
-
-          <ScrollArea
-            style={{ height: 200 }}
-            type="scroll"
-            offsetScrollbars
-            p="xs"
-          >
-            <Table
-              striped
-              fontSize="lg"
-              horizontalSpacing="lg"
-              verticalSpacing="md"
-            >
-              <thead>
-                <tr>
-                  <th>Event</th>
-                  <th>Price</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>{displayActivity()}</tbody>
-            </Table>
-          </ScrollArea>
         </div>
       </div>
       <CancelListingPopup />
