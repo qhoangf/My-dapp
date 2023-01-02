@@ -50,7 +50,7 @@ export default function MintNFT() {
       const account = await ethereum.request({ method: "eth_requestAccounts" });
       console.log("Found an account! Address: ", account[0]);
       setaddress(account[0]);
-    } catch {}
+    } catch { }
   };
 
   const onSubmit = async (err) => {
@@ -181,15 +181,6 @@ export default function MintNFT() {
                     </label>
                   </div>
                 </div>
-                <figure class="image m-4 is-2by1">
-                  <img
-                    src="https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg"
-                    id="imagePreview"
-                    style={{ objectFit: "fill" }}
-                  />
-                </figure>
-              </div>
-              <div className="column">
                 <div className="p-4">
                   <p className="title is-5 m-2 has-text-white">NFT Name</p>
                   <input
@@ -211,6 +202,18 @@ export default function MintNFT() {
                   />
                 </div>
                 {address ? displayStatus() : <NotConnected />}
+              </div>
+              <div className="column">
+                <div className="pt-4 pl-4 pr-4">
+                  <p className="title is-5 m-2 has-text-white">Preview Image</p>
+                </div>
+                <figure class="image m-4 is-2by1">
+                  <img
+                    src="https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg"
+                    id="imagePreview"
+                    style={{ objectFit: "fill" }}
+                  />
+                </figure>
                 <div className={styles.button}>
                   <button type="submit" className={styles.mintbtn}>
                     <span class="text">Mint NFT NOW</span>

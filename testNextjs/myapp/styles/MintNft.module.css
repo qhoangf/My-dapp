@@ -126,12 +126,10 @@
 }
 
 .warningcontent {
-    color: red;
-    text-shadow: 2px 2px #ffb0005c;
     text-align: center;
     font-weight: bold;
     font-size: 2rem;
-    padding-top: 20rem;
+    margin-block: auto;
 }
 
 .warningcontainer {
@@ -140,6 +138,8 @@
     background-size: 100% 100%;
 
     height: calc(100vh - 64px);
+    display: flex;
+    justify-content: center;
 }
 
 .formcontainer {
