@@ -25,7 +25,9 @@ const client = create({
     authorization: auth,
   },
 });
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(
+  "https://spring-burned-owl.bsc-testnet.discover.quiknode.pro/2749c0a5351d7ddd7495c37cad3f59d49c93ea50/"
+);
 
 export default function MintNFT() {
   const [name, setName] = useState("");
@@ -50,7 +52,7 @@ export default function MintNFT() {
       const account = await ethereum.request({ method: "eth_requestAccounts" });
       console.log("Found an account! Address: ", account[0]);
       setaddress(account[0]);
-    } catch { }
+    } catch {}
   };
 
   const onSubmit = async (err) => {

@@ -9,7 +9,7 @@ import {
 import Web3 from "web3";
 import { useRouter } from "next/router";
 
-let web3 = new Web3(Web3.givenProvider);
+let web3 = new Web3("https://spring-burned-owl.bsc-testnet.discover.quiknode.pro/2749c0a5351d7ddd7495c37cad3f59d49c93ea50/");
 
 export default function CancelListing() {
   const router = useRouter();
