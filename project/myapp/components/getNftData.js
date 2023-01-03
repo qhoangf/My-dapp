@@ -1,6 +1,6 @@
 import { contractABI, contractAddress } from "../contract";
 import Web3 from "web3";
-let web3 = new Web3("https://data-seed-prebsc-2-s1.binance.org:8545/");
+let web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/");
 import axios from "axios";
 
 const contract = new web3.eth.Contract(contractABI, contractAddress);

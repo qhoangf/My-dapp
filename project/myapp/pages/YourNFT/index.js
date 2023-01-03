@@ -12,7 +12,7 @@ import {
 } from "@thirdweb-dev/react";
 import { getNftData } from "../../components/getNftData";
 
-let web3 = new Web3("https://data-seed-prebsc-2-s1.binance.org:8545/");
+let web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/");
 
 export default function YourNFT() {
   const [datas, setDatas] = useState([]);
