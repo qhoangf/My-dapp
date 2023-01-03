@@ -32,6 +32,7 @@ export default function firstpost() {
   const [nftArray, setNftArray] = useState([]);
   const [isFinish, setIsFinish] = useState(false);
 
+  const router = useRouter();
   const [selectedSlide, setSelectedSlide] = useState("");
 
   // CREATE FUNCTION
@@ -112,7 +113,7 @@ export default function firstpost() {
   };
 
   let setCompletedTransaction = () => {
-    setActive(0);
+    // setActive(0);
     return (
       <>
         <div className="has-text-centered title is-size-5 mb-0 mt-3">
@@ -320,7 +321,7 @@ export default function firstpost() {
                     </div>
                   </Stepper.Completed>
                 </Stepper>
-                {active != 2 ? (
+                {active <= 2 ? (
                   <Group position="center" mt="xl">
                     <Button
                       className="backButton"
@@ -334,31 +335,15 @@ export default function firstpost() {
                     </Button>
                   </Group>
                 ) : !iscompleted ? (
-                  <Group position="center" mt="xl">
-                    <Button
-                      className="backButton"
-                      variant="default"
-                      onClick={prevStep}
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      className="nextButton"
-                      onClick={() => {
-                        nextStep();
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </Group>
+                  <></>
                 ) : (
                   <Group position="center" mt="xl">
                     <Button
                       className="backButton"
                       variant="default"
-                      onClick={setActive(0)}
+                      onClick={() => router.reload(window.location.pathname)}
                     >
-                      Back
+                      Done!
                     </Button>
                   </Group>
                 )}
