@@ -231,7 +231,7 @@ export default function NavBar() {
                 <div className={styles.dropdownitems}>Your NFT</div>
               </Link>
               <Link href="/Marketplace">
-                <div className={styles.dropdownitems}>Marketpalce</div>
+                <div className={styles.dropdownitems}>Marketplace</div>
               </Link>
             </div>
           </div>
