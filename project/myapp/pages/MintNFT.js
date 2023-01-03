@@ -1,4 +1,4 @@
-import { contractABI, contractAddress } from "../contract";
+import { contractABI, contractAddress, nftContract } from "../contract";
 import { useEffect, useState } from "react";
 import styles from "../styles/MintNft.module.css";
 import Link from "next/link";
@@ -25,9 +25,7 @@ const client = create({
     authorization: auth,
   },
 });
-const web3 = new Web3(
-  "https://spring-burned-owl.bsc-testnet.discover.quiknode.pro/2749c0a5351d7ddd7495c37cad3f59d49c93ea50/"
-);
+const web3 = new Web3(Web3.givenProvider);
 
 export default function MintNFT() {
   const [name, setName] = useState("");
@@ -58,13 +56,12 @@ export default function MintNFT() {
   const onSubmit = async (err) => {
     err.preventDefault();
     //get mint Price
-    const mintPrice = await contract.methods.mintPrice().call();
+    const mintPrice = await nftContract.methods.mintPrice().call();
     console.log(mintPrice);
     //gt balance of wallet address want to mint NFT
     const balanceOf = await web3.eth.getBalance(address);
-    console.log(balanceOf);
 
-    const maxMint = await contract.methods.getMaxMint(address).call();
+    const maxMint = await nftContract.methods.getMaxMint(address).call();
     let result = Number(maxMint);
     console.log("the result is: " + result);
     if (Number(maxMint) < 10) {
@@ -84,8 +81,8 @@ export default function MintNFT() {
         console.log(metadataurl);
 
         // Interact with smart contract
-
-        const response = await contract.methods
+        console.log(address);
+        const response = await nftContract.methods
           .safeMintNft(metadataurl)
           .send({ from: address, value: mintPrice });
         // Get token id
@@ -107,7 +104,7 @@ export default function MintNFT() {
     let rowMinted = [];
     let row = [];
     if (address) {
-      const maxMint = await contract.methods.getMaxMint(address).call();
+      const maxMint = await nftContract.methods.getMaxMint(address).call();
       setCount(Number(maxMint));
       for (let i = 0; i < Number(maxMint); i++) {
         rowMinted.push(" ");
@@ -148,7 +145,7 @@ export default function MintNFT() {
   const displayMintNFT = () => {
     return (
       <div className={styles.displayMintNFT}>
-        <form className={styles.formcontainer} onSubmit={onSubmit}>
+        <form className={styles.formcontainer}>
           <div className={styles.head}>
             <h1 className="title is-3 pt-5 mb-5 has-text-weight-bold has-text-white">
               NFTs Minting
@@ -217,7 +214,7 @@ export default function MintNFT() {
                   />
                 </figure>
                 <div className={styles.button}>
-                  <button type="submit" className={styles.mintbtn}>
+                  <button className={styles.mintbtn} onClick={onSubmit}>
                     <span class="text">Mint NFT NOW</span>
                   </button>
                 </div>

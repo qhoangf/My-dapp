@@ -32,7 +32,7 @@ import {
 } from "@tabler/icons";
 import moment from "moment/moment";
 
-let web3 = new Web3("https://spring-burned-owl.bsc-testnet.discover.quiknode.pro/2749c0a5351d7ddd7495c37cad3f59d49c93ea50/");
+let web3 = new Web3(Web3.givenProvider);
 
 export default function Detail() {
   const router = useRouter();
