@@ -57,12 +57,10 @@ export default function Detail() {
   const [loading, setLoading] = useState(false);
   const [loadingBuy, setLoadingBuy] = useState(false);
 
-  const urlApiEndpoit = "http://localhost:3000/api/insertNftData-lib";
-  const urlApiEndpointGetData = "http://localhost:3000/api/getNftDataById";
-  const urlApiEndpointDeleteData =
-    "http://localhost:3000/api/deleteNftData-lib";
-  const urlApiEndpointUpdateData =
-    "http://localhost:3000/api/updateNftData-lib";
+  const urlApiEndpoit = process.env.API + "insertNftData-lib";
+  const urlApiEndpointGetData = process.env.API + "getNftDataById";
+  const urlApiEndpointDeleteData = process.env.API + "deleteNftData-lib";
+  const urlApiEndpointUpdateData = process.env.API + "updateNftData-lib";
 
   function timeout(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -671,10 +669,12 @@ export default function Detail() {
             )}
             <h1>{nfts["price"]}</h1>
           </div>
-          <div style={{
-            position: "absolute",
-            bottom: "0",
-          }}>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "0",
+            }}
+          >
             {Number(nft["owned"]) == Number(address) ? (
               CancelListing()
             ) : (
@@ -708,7 +708,7 @@ export default function Detail() {
         )}
       </div>
       <div className="p-6">
-      <div id="saleDetail" className={`${styles.containerSale} mb-6`}>
+        <div id="saleDetail" className={`${styles.containerSale} mb-6`}>
           <div className={styles.containerDetailHead}>
             <p>History Activity</p>
           </div>

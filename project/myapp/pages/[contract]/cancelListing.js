@@ -20,9 +20,8 @@ export default function CancelListing() {
     marketplaceAddress
   );
   const contract = new web3.eth.Contract(contractABI, contractAddress);
-  const urlApiEndpointGetData = "http://localhost:3000/api/getNftData-lib";
-  const urlApiEndpointDeleteData =
-    "http://localhost:3000/api/deleteNftData-lib";
+  const urlApiEndpointGetData = process.env.API + "getNftData-lib";
+  const urlApiEndpointDeleteData = process.env.API + "deleteNftData-lib";
 
   function splitCoupon(coupon) {
     const hash = coupon.slice(0, 66);
