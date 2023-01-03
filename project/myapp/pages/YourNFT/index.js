@@ -12,7 +12,9 @@ import {
 } from "@thirdweb-dev/react";
 import { getNftData } from "../../components/getNftData";
 
-let web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/");
+let web3 = new Web3(
+  "https://spring-burned-owl.bsc-testnet.discover.quiknode.pro/2749c0a5351d7ddd7495c37cad3f59d49c93ea50/"
+);
 
 export default function YourNFT() {
   const [datas, setDatas] = useState([]);
